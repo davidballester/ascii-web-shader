@@ -1,4 +1,7 @@
 import { renderAscii } from "./asciiRenderer.js";
+import { getIntensity } from "./imageProcessing.js";
+import { asyncEvent } from "./utils.js";
+import { feedWebCamToVideoElement } from "./webcamFeed.js";
 
 runAsciiRenderer({
   pixelsPerChar: 8,
@@ -8,7 +11,7 @@ runAsciiRenderer({
 async function runAsciiRenderer({ pixelsPerChar, frameRate }) {
   const video = document.getElementById("original");
   await feedWebCamToVideoElement(video);
-  await asyncEvent(video, "canplay");
+  await asyncEvent({ element: video, eventName: "canplay" });
   const workingCanvas = document.createElement("canvas");
   const asciiCanvas = document.getElementById("ascii-canvas");
   asciiCanvas.width = video.videoWidth;
@@ -26,18 +29,8 @@ async function runAsciiRenderer({ pixelsPerChar, frameRate }) {
 }
 
 function renderFrame({ imageData, canvas, columns }) {
-  const intensities = getIntensity(imageData);
+  const intensities = getIntensity({ imageData: imageData.data });
   renderAscii({ canvas, imageData: intensities, columns });
-}
-
-async function asyncEvent(element, eventName) {
-  return new Promise((resolve) => element.addEventListener(eventName, resolve));
-}
-
-async function feedWebCamToVideoElement(videoElement) {
-  const videoFeed = await navigator.mediaDevices.getUserMedia({ video: true });
-  videoElement.srcObject = videoFeed;
-  videoElement.play();
 }
 
 function streamVideoElementToCanvas({
@@ -68,17 +61,4 @@ function streamVideoElementToCanvas({
     );
     onNewFrame(imageData);
   }, 1e3 / frameRate);
-}
-
-function getIntensity(imageData) {
-  const ans = [];
-  for (let i = 0; i < imageData.data.length; i += 4) {
-    const r = imageData.data[i];
-    const g = imageData.data[i + 1];
-    const b = imageData.data[i + 2];
-    // CIE 1931 conversion
-    const intensity = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-    ans.push(intensity / 256);
-  }
-  return ans;
 }
