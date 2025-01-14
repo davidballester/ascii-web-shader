@@ -1,33 +1,33 @@
+import { renderAscii } from "./asciiRenderer.js";
+
 runAsciiRenderer({
   pixelsPerChar: 8,
-  frameRate: 12,
-  asciiCharactersByIntensity: "$#@MNBX0QOI*i;:,.    ".split(""),
+  frameRate: 30,
 });
 
-async function runAsciiRenderer({
-  pixelsPerChar,
-  frameRate,
-  asciiCharactersByIntensity,
-}) {
+async function runAsciiRenderer({ pixelsPerChar, frameRate }) {
   const video = document.getElementById("original");
   await feedWebCamToVideoElement(video);
   await asyncEvent(video, "canplay");
-  const canvas = document.getElementById("ascii-canvas");
-  const asciiOutput = document.getElementById("ascii-output");
+  const workingCanvas = document.createElement("canvas");
+  const asciiCanvas = document.getElementById("ascii-canvas");
+  asciiCanvas.width = video.videoWidth;
+  asciiCanvas.height = video.videoHeight;
   const scaleFactor = 1 / pixelsPerChar;
+  const columns = Math.floor(video.videoWidth * scaleFactor);
   streamVideoElementToCanvas({
     videoElement: video,
-    canvasElement: canvas,
+    canvasElement: workingCanvas,
     scaleFactor,
     frameRate,
     onNewFrame: (imageData) =>
-      renderAscii({
-        imageData,
-        asciiCharactersByIntensity,
-        outputElement: asciiOutput,
-        columns: Math.floor(video.videoWidth * scaleFactor),
-      }),
+      renderFrame({ imageData, canvas: asciiCanvas, columns }),
   });
+}
+
+function renderFrame({ imageData, canvas, columns }) {
+  const intensities = getIntensity(imageData);
+  renderAscii({ canvas, imageData: intensities, columns });
 }
 
 async function asyncEvent(element, eventName) {
@@ -70,27 +70,6 @@ function streamVideoElementToCanvas({
   }, 1e3 / frameRate);
 }
 
-function renderAscii({
-  imageData,
-  asciiCharactersByIntensity,
-  columns,
-  outputElement,
-}) {
-  const intensities = getIntensity(imageData);
-  const asciiCharacters = intensities.map((intensity) =>
-    getAsciiCharForIntensity({ intensity, asciiCharactersByIntensity })
-  );
-  outputElement.textContent = "";
-  for (let i = 0; i < asciiCharacters.length; i++) {
-    const asciiCharacter = asciiCharacters[i];
-    const requiresLineBreak = i > 0 && i % columns === 0;
-    if (requiresLineBreak) {
-      outputElement.textContent += "\n";
-    }
-    outputElement.textContent += asciiCharacter;
-  }
-}
-
 function getIntensity(imageData) {
   const ans = [];
   for (let i = 0; i < imageData.data.length; i += 4) {
@@ -102,16 +81,4 @@ function getIntensity(imageData) {
     ans.push(intensity / 256);
   }
   return ans;
-}
-
-function getAsciiCharForIntensity({ intensity, asciiCharactersByIntensity }) {
-  const index = Math.floor(intensity * asciiCharactersByIntensity.length);
-  return asciiCharactersByIntensity[index];
-}
-
-async function waitMs(ms) {
-  if (ms <= 0) {
-    return;
-  }
-  return new Promise((resolve) => setTimeout(resolve, ms));
 }
