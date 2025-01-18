@@ -1,6 +1,6 @@
 import { getEdgesMask } from "./sobelFilter.js";
 
-const ASCII_CHARACTERS = "$#@MNBX0QOI*i;:,.    ".split("");
+const ASCII_CHARACTERS = "$#@MNBxoi;:,. ".split("");
 
 export function renderAscii({ canvas, imageData, columns }) {
   clearCanvas(canvas);
@@ -9,7 +9,7 @@ export function renderAscii({ canvas, imageData, columns }) {
   const asciiWithEdges = ascii.map((value, i) => edgesMask[i] || value);
   for (let i = 0; i < columns; i++) {
     const asciiLine = asciiWithEdges.slice(i * columns, (i + 1) * columns);
-    renderAsciiLine({ canvas, asciiLine, lineNumber: i });
+    renderAsciiLine({ canvas, asciiLine, lineNumber: i + 1 });
   }
 }
 
