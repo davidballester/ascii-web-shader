@@ -1,17 +1,15 @@
 import { getEdgesMask } from "./sobelFilter.js";
-import { asyncEvent } from "./utils.js";
 import { getIntensity } from "./imageProcessing.js";
 
 const ASCII_CHARACTERS = "$#@MXxoi;:,. ".split("");
 const getTextColor = buildGetTextColor();
 
-export async function videoToAscii({
+export function videoToAscii({
   video,
   canvas: asciiCanvas,
   pixelsPerChar,
   frameRate,
 }) {
-  await asyncEvent({ element: video, eventName: "canplay" });
   const workingCanvas = document.createElement("canvas");
   prepareAsciiCanvas({ canvas: asciiCanvas, video });
   const scaleFactor = 1 / pixelsPerChar;
