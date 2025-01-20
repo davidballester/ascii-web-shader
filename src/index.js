@@ -11,6 +11,7 @@ document.getElementById("enable-webcam").addEventListener("click", async () => {
   try {
     await feedWebCamToVideoElement(video);
     enableVideo();
+    mirrorVideo();
     await asyncEvent({ element: video, eventName: "canplay" });
     videoToAscii({
       video,
@@ -45,6 +46,7 @@ document
     videoElement.src = URL.createObjectURL(videoFile);
     videoElement.load();
     videoElement.play();
+    videoElement.setAttribute("controls", "");
     const { error } = await videoReady;
     if (error) {
       enableInputs();
@@ -77,4 +79,9 @@ function enableVideo() {
   document
     .getElementById("user-submitted-video-button")
     .classList.add("hidden", "live");
+}
+
+function mirrorVideo() {
+  document.getElementById("ascii-canvas").classList.add("mirrored");
+  document.getElementById("original").classList.add("mirrored");
 }

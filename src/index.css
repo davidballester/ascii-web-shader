@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-video,
-canvas {
+.mirrored {
   transform: rotateY(180deg);
 }
