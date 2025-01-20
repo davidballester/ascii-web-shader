@@ -1,33 +1,38 @@
 import { getEdgesMask } from "./sobelFilter.js";
 import { getIntensity } from "./imageProcessing.js";
+import { waitMs } from "./utils.js";
 
 const ASCII_CHARACTERS = "$#@MXxoi;:,. ".split("");
 const COLUMNS = 80;
 const getTextColor = buildGetTextColor();
 
-export function videoToAscii({ video, canvas: asciiCanvas, frameRate }) {
+export async function videoToAscii({ video, canvas: asciiCanvas, frameRate }) {
   const workingCanvas = document.createElement("canvas");
   const context = asciiCanvas.getContext("2d");
   const pixelsPerChar = video.videoWidth / COLUMNS;
   const scaleFactor = 1 / pixelsPerChar;
   const fontSize = video.offsetWidth / COLUMNS;
   prepareAsciiCanvas({ canvas: asciiCanvas, video, fontSize });
-  streamVideoElementToCanvas({
+  const frameGenerator = streamVideoElementToCanvas({
     videoElement: video,
     canvasElement: workingCanvas,
     scaleFactor,
-    frameRate,
-    onNewFrame: (imageData) => {
-      const intensities = getIntensity({ imageData: imageData.data });
-      const ascii = frameToAscii({ imageData: intensities });
-      context.clearRect(0, 0, asciiCanvas.width, asciiCanvas.height);
-      const rows = ascii.length / COLUMNS;
-      for (let row = 0; row < rows; row++) {
-        const asciiLine = ascii.slice(row * COLUMNS, (row + 1) * COLUMNS);
-        context.fillText(asciiLine.join(""), 0, (row + 1) * (fontSize * 1.2));
-      }
-    },
   });
+  const msBetweenFrames = 1e3 / frameRate;
+  for (const frame of frameGenerator) {
+    const startTime = Date.now();
+    const imageData = frame.data;
+    const intensities = getIntensity({ imageData });
+    const ascii = frameToAscii({ imageData: intensities });
+    context.clearRect(0, 0, asciiCanvas.width, asciiCanvas.height);
+    const rows = ascii.length / COLUMNS;
+    for (let row = 0; row < rows; row++) {
+      const asciiLine = ascii.slice(row * COLUMNS, (row + 1) * COLUMNS);
+      context.fillText(asciiLine.join(""), 0, (row + 1) * (fontSize * 1.2));
+    }
+    const elapsedTime = Date.now() - startTime;
+    await waitMs(msBetweenFrames - elapsedTime);
+  }
 }
 
 function frameToAscii({ imageData }) {
@@ -57,19 +62,17 @@ function prepareAsciiCanvas({ canvas, video, fontSize }) {
   context.fillStyle = getTextColor(canvas);
 }
 
-function streamVideoElementToCanvas({
+function* streamVideoElementToCanvas({
   videoElement,
   canvasElement,
   scaleFactor,
-  frameRate,
-  onNewFrame,
 }) {
   canvasElement.width = videoElement.videoWidth * scaleFactor;
   canvasElement.height = videoElement.videoHeight * scaleFactor;
   const canvasContext = canvasElement.getContext("2d", {
     willReadFrequently: true,
   });
-  setInterval(() => {
+  while (true) {
     canvasContext.drawImage(
       videoElement,
       0,
@@ -83,8 +86,8 @@ function streamVideoElementToCanvas({
       canvasElement.width,
       canvasElement.height
     );
-    onNewFrame(imageData);
-  }, 1e3 / frameRate);
+    yield imageData;
+  }
 }
 
 function buildGetTextColor() {
