@@ -2,6 +2,8 @@ import { videoToAscii } from "./asciiRenderer.js";
 import { asyncEvent, waitMs } from "./utils.js";
 import { feedWebCamToVideoElement } from "./webcamFeed.js";
 
+const FRAME_RATE = 30;
+
 document.getElementById("enable-webcam").addEventListener("click", async () => {
   disableInputs();
   const startTime = Date.now();
@@ -13,7 +15,7 @@ document.getElementById("enable-webcam").addEventListener("click", async () => {
     videoToAscii({
       video,
       canvas: document.getElementById("ascii-canvas"),
-      frameRate: 30,
+      frameRate: FRAME_RATE,
     });
   } catch (err) {
     const elapsedTime = Date.now() - startTime;
@@ -52,7 +54,7 @@ document
     videoToAscii({
       video: videoElement,
       canvas: document.getElementById("ascii-canvas"),
-      frameRate: 30,
+      frameRate: FRAME_RATE,
     });
   });
 
