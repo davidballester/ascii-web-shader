@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="index.css" />
   </head>
   <body class="bg-orange-500 text-sky-100">
-    <main class="container mx-auto">
+    <main class="container mx-auto p-8">
       <header class="text-center p-16">
         <h1 class="text-6xl font-bold">Check out this ASCII shader</h1>
       </header>
@@ -42,15 +42,16 @@
         </div>
         <div
           id="feed"
-          class="justify-center space-x-4 hidden peer-[.live]:flex"
+          class="justify-center space-x-4 hidden peer-[.live]:flex relative"
         >
           <video
             id="original"
-            class="rounded max-w-lg shadow-md shadow-sky-950/20 border-t-4 border-r-4 border-l-4 border-b-[64px] border-sky-100"
+            class="rounded bg-sky-100 w-full max-w-[50%] shadow-md shadow-sky-950/20 border-t-4 border-r-4 border-l-4 border-b-[64px] border-sky-100"
+            controls
           ></video>
           <canvas
             id="ascii-canvas"
-            class="rounded max-w-lg bg-sky-100 text-sky-950 shadow-md shadow-sky-950/20 border-t-4 border-r-4 border-l-4 border-b-[64px] border-sky-100"
+            class="rounded w-full max-w-[50%] bg-sky-100 text-sky-950 shadow-md shadow-sky-950/20 border-t-4 border-r-4 border-l-4 border-b-[64px] border-sky-100"
           ></canvas>
         </div>
       </div>
