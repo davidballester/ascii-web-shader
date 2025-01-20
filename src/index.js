@@ -13,7 +13,6 @@ document.getElementById("enable-webcam").addEventListener("click", async () => {
     videoToAscii({
       video,
       canvas: document.getElementById("ascii-canvas"),
-      pixelsPerChar: 8,
       frameRate: 30,
     });
   } catch (err) {
@@ -53,7 +52,6 @@ document
     videoToAscii({
       video: videoElement,
       canvas: document.getElementById("ascii-canvas"),
-      pixelsPerChar: 8,
       frameRate: 30,
     });
   });
