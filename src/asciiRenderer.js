@@ -21,9 +21,10 @@ export function videoToAscii({ video, canvas: asciiCanvas, frameRate }) {
       const intensities = getIntensity({ imageData: imageData.data });
       const ascii = frameToAscii({ imageData: intensities });
       context.clearRect(0, 0, asciiCanvas.width, asciiCanvas.height);
-      for (let i = 0; i < COLUMNS; i++) {
-        const asciiLine = ascii.slice(i * COLUMNS, (i + 1) * COLUMNS);
-        context.fillText(asciiLine.join(""), 0, (i + 1) * (fontSize * 1.2));
+      const rows = ascii.length / COLUMNS;
+      for (let row = 0; row < rows; row++) {
+        const asciiLine = ascii.slice(row * COLUMNS, (row + 1) * COLUMNS);
+        context.fillText(asciiLine.join(""), 0, (row + 1) * (fontSize * 1.2));
       }
     },
   });
