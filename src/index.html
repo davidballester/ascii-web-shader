@@ -7,68 +7,81 @@
     <link rel="stylesheet" href="index.css" />
   </head>
   <body class="bg-orange-500 text-sky-100">
-    <main class="container mx-auto p-8">
-      <header class="text-center p-16">
-        <h1 class="text-6xl font-bold">Check out this ASCII shader</h1>
-      </header>
-      <div class="relative flex flex-col justify-center items-center space-y-4">
-        <button
-          id="enable-webcam"
-          class="group peer mt-24 rounded-lg py-3 px-12 text-md font-bold uppercase shadow-md shadow-sky-950/20 bg-sky-900 text-sky-100 w-96 transition-all hover:shadow-lg hover:shadow-sky-950/40 active:opacity-[0.85] active:shadow-none disabled:opacity-50 disabled:shadow-none leading-8"
-        >
-          <div class="flex space-x-4 justify-center">
-            <div
-              style="border-top-color: transparent"
-              class="w-8 h-8 border-4 border-blue-200 rounded-full animate-spin hidden group-disabled:block"
-            ></div>
-            <span class="block group-disabled:hidden">Enable Webcam</span>
-          </div>
-        </button>
+    <div class="container mx-auto flex flex-col min-h-screen">
+      <main class="p-8 flex-grow">
+        <header class="text-center p-16">
+          <h1 class="text-6xl font-bold">Check out this ASCII shader</h1>
+        </header>
         <div
-          id="user-submitted-video-button"
-          class="rounded-lg text-md font-bold uppercase shadow-md shadow-sky-100/20 bg-sky-100 text-sky-900 w-96 transition-all hover:shadow-lg hover:shadow-sky-100/40 active:opacity-[0.85] active:shadow-none aria-disabled:opacity-50 aria-disabled:shadow-none cursor-pointer leading-8"
+          class="relative flex flex-col justify-center items-center space-y-4"
         >
-          <label
-            for="user-submitted-video"
-            class="w-full text-center block cursor-pointer py-3 px-12"
-            >Upload your video file</label
-          >
-          <input
-            id="user-submitted-video"
-            type="file"
-            accept="video/*"
-            class="hidden"
-          />
-        </div>
-        <div
-          id="feed"
-          class="justify-center space-y-8 hidden peer-[.live]:flex relative flex-col items-center"
-        >
-          <div class="flex space-x-4">
-            <video
-              id="video-template"
-              class="rounded bg-sky-100 w-full max-w-[50%] shadow-md shadow-sky-950/20 border-t-4 border-r-4 border-l-4 border-b-[64px] border-sky-100 hidden"
-            ></video>
-            <canvas
-              id="canvas-template"
-              class="rounded w-full max-w-[50%] bg-sky-100 text-sky-950 shadow-md shadow-sky-950/20 border-t-4 border-r-4 border-l-4 border-b-[64px] border-sky-100 hidden"
-            ></canvas>
-          </div>
           <button
-            id="stop"
-            class="rounded-lg py-3 px-12 text-md font-bold uppercase shadow-md shadow-sky-100/20 bg-sky-100 text-sky-900 w-96 transition-all hover:shadow-lg hover:shadow-sky-100/40 active:opacity-[0.85] active:shadow-none aria-disabled:opacity-50 aria-disabled:shadow-none cursor-pointer leading-8"
+            id="enable-webcam"
+            class="group peer mt-24 rounded-lg py-3 px-12 text-md font-bold uppercase shadow-md shadow-sky-950/20 bg-sky-900 text-sky-100 w-96 transition-all hover:shadow-lg hover:shadow-sky-950/40 active:opacity-[0.85] active:shadow-none disabled:opacity-50 disabled:shadow-none leading-8"
           >
             <div class="flex space-x-4 justify-center">
               <div
                 style="border-top-color: transparent"
                 class="w-8 h-8 border-4 border-blue-200 rounded-full animate-spin hidden group-disabled:block"
               ></div>
-              <span class="block group-disabled:hidden">Stop</span>
+              <span class="block group-disabled:hidden">Enable Webcam</span>
             </div>
           </button>
+          <div
+            id="user-submitted-video-button"
+            class="rounded-lg text-md font-bold uppercase shadow-md shadow-sky-100/20 bg-sky-100 text-sky-900 w-96 transition-all hover:shadow-lg hover:shadow-sky-100/40 active:opacity-[0.85] active:shadow-none aria-disabled:opacity-50 aria-disabled:shadow-none cursor-pointer leading-8"
+          >
+            <label
+              for="user-submitted-video"
+              class="w-full text-center block cursor-pointer py-3 px-12"
+              >Upload your video file</label
+            >
+            <input
+              id="user-submitted-video"
+              type="file"
+              accept="video/*"
+              class="hidden"
+            />
+          </div>
+          <div
+            id="feed"
+            class="justify-center space-y-8 hidden peer-[.live]:flex relative flex-col items-center"
+          >
+            <div class="flex space-x-4">
+              <video
+                id="video-template"
+                class="rounded bg-sky-100 w-full max-w-[50%] shadow-md shadow-sky-950/20 border-t-4 border-r-4 border-l-4 border-b-[64px] border-sky-100 hidden"
+              ></video>
+              <canvas
+                id="canvas-template"
+                class="rounded w-full max-w-[50%] bg-sky-100 text-sky-950 shadow-md shadow-sky-950/20 border-t-4 border-r-4 border-l-4 border-b-[64px] border-sky-100 hidden"
+              ></canvas>
+            </div>
+            <button
+              id="stop"
+              class="rounded-lg py-3 px-12 text-md font-bold uppercase shadow-md shadow-sky-100/20 bg-sky-100 text-sky-900 w-96 transition-all hover:shadow-lg hover:shadow-sky-100/40 active:opacity-[0.85] active:shadow-none aria-disabled:opacity-50 aria-disabled:shadow-none cursor-pointer leading-8"
+            >
+              <div class="flex space-x-4 justify-center">
+                <div
+                  style="border-top-color: transparent"
+                  class="w-8 h-8 border-4 border-blue-200 rounded-full animate-spin hidden group-disabled:block"
+                ></div>
+                <span class="block group-disabled:hidden">Stop</span>
+              </div>
+            </button>
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+      <footer class="p-8 flex items-center space-x-4 w-auto m-auto">
+        <a
+          href="https://github.com/davidballester/ascii-web-shader"
+          title="GitHub repository"
+        >
+          <img src="github-mark-white.svg" alt="GitHub icon" class="w-12" />
+        </a>
+        <span class="text-xl">David Ballester Mena</span>
+      </footer>
+    </div>
     <script type="module" src="index.js"></script>
   </body>
 </html>
