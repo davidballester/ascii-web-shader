@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "source": "src/index.html",
   "scripts": {
-    "start": "parcel",
+    "start": "rm -rf .parce-cache/* && rm -rf dist/* && parcel",
     "build": "parcel build"
   },
   "keywords": [],
