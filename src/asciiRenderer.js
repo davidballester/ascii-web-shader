@@ -59,8 +59,9 @@ function valueToAscii(value) {
 
 function prepareAsciiCanvas({ canvas, video, fontSize }) {
   const { width, height } = video.getBoundingClientRect();
-  canvas.style.width = `${width}px`;
-  canvas.style.height = `${height}px`;
+  // Setting the dimension for video as well prevents any undesired resizing
+  canvas.style.width = video.style.width = `${width}px`;
+  canvas.style.height = video.style.height = `${height}px`;
   canvas.width = width;
   canvas.height = height;
   canvas.style.letterSpacing = `${(fontSize * 0.4).toFixed(2)}px`;
