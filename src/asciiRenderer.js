@@ -64,9 +64,6 @@ function prepareAsciiCanvas({ canvas, video, fontSize }) {
   canvas.width = width;
   canvas.height = height;
   canvas.style.letterSpacing = `${(fontSize * 0.4).toFixed(2)}px`;
-  canvas
-    .getContext("2d")
-    .scale(window.devicePixelRatio, window.devicePixelRatio);
   const context = canvas.getContext("2d");
   context.font = `${fontSize.toFixed(2)}px monospace`;
   context.fillStyle = getTextColor(canvas);

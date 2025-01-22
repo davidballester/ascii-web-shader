@@ -9,7 +9,7 @@
   <body class="bg-orange-500 text-sky-100">
     <div class="container mx-auto flex flex-col min-h-screen">
       <main class="p-8 flex-grow">
-        <header class="text-center p-16">
+        <header class="text-center p-4 sm:p-16">
           <h1 class="text-6xl font-bold">Check out this ASCII shader</h1>
         </header>
         <div
@@ -47,14 +47,14 @@
             id="feed"
             class="justify-center space-y-8 hidden peer-[.live]:flex relative flex-col items-center"
           >
-            <div class="flex space-x-4">
+            <div class="flex sm:space-x-4">
               <video
                 id="video-template"
-                class="rounded bg-sky-100 w-full max-w-[50%] shadow-md shadow-sky-950/20 border-t-4 border-r-4 border-l-4 border-b-[64px] border-sky-100 hidden"
+                class="rounded bg-sky-100 shadow-md shadow-sky-950/20 border-t-4 border-r-4 border-l-4 border-b-[64px] border-sky-100 hidden invisible sm:visible absolute sm:relative top-0 left-0 w-full sm:max-w-[50%]"
               ></video>
               <canvas
                 id="canvas-template"
-                class="rounded w-full max-w-[50%] bg-sky-100 text-sky-950 shadow-md shadow-sky-950/20 border-t-4 border-r-4 border-l-4 border-b-[64px] border-sky-100 hidden"
+                class="rounded bg-sky-100 text-sky-950 shadow-md shadow-sky-950/20 border-t-4 border-r-4 border-l-4 border-b-[64px] border-sky-100 hidden w-full sm:max-w-[50%]"
               ></canvas>
             </div>
             <button
