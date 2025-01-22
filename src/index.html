@@ -42,16 +42,30 @@
         </div>
         <div
           id="feed"
-          class="justify-center space-x-4 hidden peer-[.live]:flex relative"
+          class="justify-center space-y-8 hidden peer-[.live]:flex relative flex-col items-center"
         >
-          <video
-            id="original"
-            class="rounded bg-sky-100 w-full max-w-[50%] shadow-md shadow-sky-950/20 border-t-4 border-r-4 border-l-4 border-b-[64px] border-sky-100"
-          ></video>
-          <canvas
-            id="ascii-canvas"
-            class="rounded w-full max-w-[50%] bg-sky-100 text-sky-950 shadow-md shadow-sky-950/20 border-t-4 border-r-4 border-l-4 border-b-[64px] border-sky-100"
-          ></canvas>
+          <div class="flex space-x-4">
+            <video
+              id="video-template"
+              class="rounded bg-sky-100 w-full max-w-[50%] shadow-md shadow-sky-950/20 border-t-4 border-r-4 border-l-4 border-b-[64px] border-sky-100 hidden"
+            ></video>
+            <canvas
+              id="canvas-template"
+              class="rounded w-full max-w-[50%] bg-sky-100 text-sky-950 shadow-md shadow-sky-950/20 border-t-4 border-r-4 border-l-4 border-b-[64px] border-sky-100 hidden"
+            ></canvas>
+          </div>
+          <button
+            id="stop"
+            class="rounded-lg py-3 px-12 text-md font-bold uppercase shadow-md shadow-sky-100/20 bg-sky-100 text-sky-900 w-96 transition-all hover:shadow-lg hover:shadow-sky-100/40 active:opacity-[0.85] active:shadow-none aria-disabled:opacity-50 aria-disabled:shadow-none cursor-pointer leading-8"
+          >
+            <div class="flex space-x-4 justify-center">
+              <div
+                style="border-top-color: transparent"
+                class="w-8 h-8 border-4 border-blue-200 rounded-full animate-spin hidden group-disabled:block"
+              ></div>
+              <span class="block group-disabled:hidden">Stop</span>
+            </div>
+          </button>
         </div>
       </div>
     </main>

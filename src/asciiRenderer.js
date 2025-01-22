@@ -6,7 +6,7 @@ const ASCII_CHARACTERS = "$#@MXxoi;:,. ".split("");
 const COLUMNS = 80;
 const getTextColor = buildGetTextColor();
 
-export async function videoToAscii({ video, canvas: asciiCanvas, frameRate }) {
+export function videoToAscii({ video, canvas: asciiCanvas, frameRate }) {
   const workingCanvas = document.createElement("canvas");
   const context = asciiCanvas.getContext("2d");
   const pixelsPerChar = video.videoWidth / COLUMNS;
@@ -19,20 +19,30 @@ export async function videoToAscii({ video, canvas: asciiCanvas, frameRate }) {
     scaleFactor,
   });
   const msBetweenFrames = 1e3 / frameRate;
-  for (const frame of frameGenerator) {
-    const startTime = Date.now();
-    const imageData = frame.data;
-    const intensities = getIntensity({ imageData });
-    const ascii = frameToAscii({ imageData: intensities });
-    context.clearRect(0, 0, asciiCanvas.width, asciiCanvas.height);
-    const rows = ascii.length / COLUMNS;
-    for (let row = 0; row < rows; row++) {
-      const asciiLine = ascii.slice(row * COLUMNS, (row + 1) * COLUMNS);
-      context.fillText(asciiLine.join(""), 0, (row + 1) * (fontSize * 1.2));
+  let finished = false;
+  setTimeout(async () => {
+    for (const frame of frameGenerator) {
+      if (finished) {
+        frameGenerator.return();
+        break;
+      }
+      const startTime = Date.now();
+      const imageData = frame.data;
+      const intensities = getIntensity({ imageData });
+      const ascii = frameToAscii({ imageData: intensities });
+      context.clearRect(0, 0, asciiCanvas.width, asciiCanvas.height);
+      const rows = ascii.length / COLUMNS;
+      for (let row = 0; row < rows; row++) {
+        const asciiLine = ascii.slice(row * COLUMNS, (row + 1) * COLUMNS);
+        context.fillText(asciiLine.join(""), 0, (row + 1) * (fontSize * 1.2));
+      }
+      const elapsedTime = Date.now() - startTime;
+      await waitMs(msBetweenFrames - elapsedTime);
     }
-    const elapsedTime = Date.now() - startTime;
-    await waitMs(msBetweenFrames - elapsedTime);
-  }
+  }, 0);
+  return () => {
+    finished = true;
+  };
 }
 
 function frameToAscii({ imageData }) {
