@@ -10,14 +10,16 @@
     <div class="container mx-auto flex flex-col min-h-screen">
       <main class="p-8 flex-grow">
         <header class="text-center p-4 sm:p-16">
-          <h1 class="text-6xl font-bold">Check out this ASCII shader</h1>
+          <h1 class="text-4xl sm:text-6xl font-bold">
+            Check out this ASCII shader
+          </h1>
         </header>
         <div
           class="relative flex flex-col justify-center items-center space-y-4"
         >
           <button
             id="enable-webcam"
-            class="group peer mt-24 rounded-lg py-3 px-12 text-md font-bold uppercase shadow-md shadow-sky-950/20 bg-sky-900 text-sky-100 w-96 transition-all hover:shadow-lg hover:shadow-sky-950/40 active:opacity-[0.85] active:shadow-none disabled:opacity-50 disabled:shadow-none leading-8"
+            class="group peer mt-24 rounded-lg py-3 px-12 text-md font-bold uppercase shadow-md shadow-sky-950/20 bg-sky-900 text-sky-100 w-full max-w-96 transition-all hover:shadow-lg hover:shadow-sky-950/40 active:opacity-[0.85] active:shadow-none disabled:opacity-50 disabled:shadow-none leading-8"
           >
             <div class="flex space-x-4 justify-center">
               <div
@@ -29,7 +31,7 @@
           </button>
           <div
             id="user-submitted-video-button"
-            class="rounded-lg text-md font-bold uppercase shadow-md shadow-sky-100/20 bg-sky-100 text-sky-900 w-96 transition-all hover:shadow-lg hover:shadow-sky-100/40 active:opacity-[0.85] active:shadow-none aria-disabled:opacity-50 aria-disabled:shadow-none cursor-pointer leading-8"
+            class="rounded-lg text-md font-bold uppercase shadow-md shadow-sky-100/20 bg-sky-100 text-sky-900 w-full max-w-96 transition-all hover:shadow-lg hover:shadow-sky-100/40 active:opacity-[0.85] active:shadow-none aria-disabled:opacity-50 aria-disabled:shadow-none cursor-pointer leading-8"
           >
             <label
               for="user-submitted-video"
