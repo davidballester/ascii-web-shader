@@ -5,6 +5,7 @@ import { waitMs } from "./utils.js";
 const ASCII_CHARACTERS = "$#@MXxoi;:,. ".split("");
 const COLUMNS = 80;
 const getTextColor = buildGetTextColor();
+const isIPhone = /iPhone/.test(navigator.userAgent);
 
 export function videoToAscii({ video, canvas: asciiCanvas, frameRate }) {
   const workingCanvas = document.createElement("canvas");
@@ -34,7 +35,10 @@ export function videoToAscii({ video, canvas: asciiCanvas, frameRate }) {
       const rows = ascii.length / COLUMNS;
       for (let row = 0; row < rows; row++) {
         const asciiLine = ascii.slice(row * COLUMNS, (row + 1) * COLUMNS);
-        context.fillText(asciiLine.join(""), 0, (row + 1) * (fontSize * 1.2));
+        const text = isIPhone
+          ? asciiLine.join(String.fromCharCode(8202))
+          : asciiLine.join("");
+        context.fillText(text, 0, (row + 1) * (fontSize * 1.2));
       }
       const elapsedTime = Date.now() - startTime;
       await waitMs(msBetweenFrames - elapsedTime);
