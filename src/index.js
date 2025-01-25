@@ -22,6 +22,7 @@ document.getElementById("enable-webcam").addEventListener("click", async () => {
       frameRate: FRAME_RATE,
     });
   } catch (err) {
+    console.error(err);
     const elapsedTime = Date.now() - startTime;
     const remainingTimeForSmoothAnimation = 3e3 - elapsedTime;
     await waitMs(remainingTimeForSmoothAnimation);
