@@ -5,13 +5,14 @@ import { waitMs } from "./utils.js";
 const ASCII_CHARACTERS = "$#@MXxoi;:,. ".split("");
 const COLUMNS = 80;
 const getTextColor = buildGetTextColor();
-const isIPhone = /iPhone/.test(navigator.userAgent);
 
 export function videoToAscii({ video, canvas: asciiCanvas, frameRate }) {
   const { fontSize, scaleFactor } = prepareAsciiCanvas({
     canvas: asciiCanvas,
     video,
   });
+  const fontSizeWithSpacing = fontSize;
+  const lineHeight = fontSize * 1.2;
   const frameGenerator = generateFrames({
     videoElement: video,
     scaleFactor,
@@ -33,14 +34,13 @@ export function videoToAscii({ video, canvas: asciiCanvas, frameRate }) {
       const rows = ascii.length / COLUMNS;
       for (let row = 0; row < rows; row++) {
         const asciiLine = ascii.slice(row * COLUMNS, (row + 1) * COLUMNS);
-        // in iPhone we cannot relay in letter spacing to separate the ASCII characters
-        const text = isIPhone
-          ? asciiLine.join(String.fromCharCode(8202))
-          : asciiLine.join("");
-        context.fillText(text, 0, (row + 1) * (fontSize * 1.2));
+        const yOffset = (row + 1) * lineHeight;
+        asciiLine.forEach((asciiChar, index) => {
+          context.fillText(asciiChar, index * fontSizeWithSpacing, yOffset);
+        });
       }
       const elapsedTime = Date.now() - startTime;
-      await waitMs(msBetweenFrames - elapsedTime);
+      await waitMs(Math.max(20, msBetweenFrames - elapsedTime));
     }
   }, 0);
   return () => {
@@ -68,7 +68,6 @@ function prepareAsciiCanvas({ canvas, video }) {
   canvas.width = width;
   canvas.height = height;
   const fontSize = width / COLUMNS;
-  canvas.style.letterSpacing = `${(fontSize * 0.4).toFixed(2)}px`;
   const context = canvas.getContext("2d");
   context.font = `${fontSize.toFixed(2)}px monospace`;
   context.fillStyle = getTextColor(canvas);
