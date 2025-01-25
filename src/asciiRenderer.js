@@ -8,17 +8,15 @@ const getTextColor = buildGetTextColor();
 const isIPhone = /iPhone/.test(navigator.userAgent);
 
 export function videoToAscii({ video, canvas: asciiCanvas, frameRate }) {
-  const workingCanvas = document.createElement("canvas");
-  const context = asciiCanvas.getContext("2d");
-  const pixelsPerChar = video.videoWidth / COLUMNS;
-  const scaleFactor = 1 / pixelsPerChar;
-  const fontSize = video.offsetWidth / COLUMNS;
-  prepareAsciiCanvas({ canvas: asciiCanvas, video, fontSize });
-  const frameGenerator = streamVideoElementToCanvas({
+  const { fontSize, scaleFactor } = prepareAsciiCanvas({
+    canvas: asciiCanvas,
+    video,
+  });
+  const frameGenerator = generateFrames({
     videoElement: video,
-    canvasElement: workingCanvas,
     scaleFactor,
   });
+  const context = asciiCanvas.getContext("2d");
   const msBetweenFrames = 1e3 / frameRate;
   let finished = false;
   setTimeout(async () => {
@@ -62,42 +60,37 @@ function valueToAscii(value) {
   return ASCII_CHARACTERS[index];
 }
 
-function prepareAsciiCanvas({ canvas, video, fontSize }) {
+function prepareAsciiCanvas({ canvas, video }) {
   const { width, height } = video.getBoundingClientRect();
   // Setting the dimension for video as well prevents any undesired resizing
   canvas.style.width = video.style.width = `${width}px`;
   canvas.style.height = video.style.height = `${height}px`;
   canvas.width = width;
   canvas.height = height;
+  const fontSize = width / COLUMNS;
   canvas.style.letterSpacing = `${(fontSize * 0.4).toFixed(2)}px`;
   const context = canvas.getContext("2d");
   context.font = `${fontSize.toFixed(2)}px monospace`;
   context.fillStyle = getTextColor(canvas);
+  const pixelsPerChar = video.videoWidth / COLUMNS;
+  const scaleFactor = 1 / pixelsPerChar;
+  return { fontSize, scaleFactor };
 }
 
-function* streamVideoElementToCanvas({
-  videoElement,
-  canvasElement,
-  scaleFactor,
-}) {
-  canvasElement.width = videoElement.videoWidth * scaleFactor;
-  canvasElement.height = videoElement.videoHeight * scaleFactor;
-  const canvasContext = canvasElement.getContext("2d", {
+function* generateFrames({ videoElement, scaleFactor }) {
+  const canvas = document.createElement("canvas");
+  canvas.width = videoElement.videoWidth * scaleFactor;
+  canvas.height = videoElement.videoHeight * scaleFactor;
+  const canvasContext = canvas.getContext("2d", {
     willReadFrequently: true,
   });
   while (true) {
-    canvasContext.drawImage(
-      videoElement,
-      0,
-      0,
-      canvasElement.width,
-      canvasElement.height
-    );
+    canvasContext.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
     const imageData = canvasContext.getImageData(
       0,
       0,
-      canvasElement.width,
-      canvasElement.height
+      canvas.width,
+      canvas.height
     );
     yield imageData;
   }
