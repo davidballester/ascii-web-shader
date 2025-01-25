@@ -35,6 +35,7 @@ export function videoToAscii({ video, canvas: asciiCanvas, frameRate }) {
       const rows = ascii.length / COLUMNS;
       for (let row = 0; row < rows; row++) {
         const asciiLine = ascii.slice(row * COLUMNS, (row + 1) * COLUMNS);
+        // in iPhone we cannot relay in letter spacing to separate the ASCII characters
         const text = isIPhone
           ? asciiLine.join(String.fromCharCode(8202))
           : asciiLine.join("");
