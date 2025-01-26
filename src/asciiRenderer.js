@@ -73,7 +73,10 @@ function prepareAsciiCanvas({ canvas, video }) {
   context.fillStyle = getTextColor(canvas);
   const pixelsPerChar = video.videoWidth / COLUMNS;
   const scaleFactor = 1 / pixelsPerChar;
-  return { fontSize, scaleFactor };
+  return {
+    fontSize,
+    scaleFactor,
+  };
 }
 
 function* generateFrames({ videoElement, scaleFactor }) {

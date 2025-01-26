@@ -5,11 +5,43 @@ import { feedWebCamToVideoElement } from "./webcamFeed.js";
 const FRAME_RATE = 30;
 
 let stopCurrentStreaming = null;
+let currentVideoFile = null;
 
-document.getElementById("enable-webcam").addEventListener("click", async () => {
+document
+  .getElementById("enable-webcam")
+  .addEventListener("click", runAsciiShaderOnWebcamFeed);
+document
+  .getElementById("user-submitted-video")
+  .addEventListener("change", async (evt) => {
+    const videoFile = evt.target.files[0];
+    currentVideoFile = videoFile;
+    if (!videoFile) {
+      return;
+    }
+    runAsciiShaderOnVideoFile({ videoFile });
+  });
+document.getElementById("stop").addEventListener("click", reset);
+window.addEventListener("orientationchange", async () => {
+  if (!stopCurrentStreaming) {
+    return;
+  }
+  const video = document.getElementById("video");
+  const isWebcam = video.classList.contains("webcam");
+  const currentTime = video.currentTime;
+  reset();
+  if (isWebcam) {
+    runAsciiShaderOnWebcamFeed();
+  } else {
+    await runAsciiShaderOnVideoFile({ videoFile: currentVideoFile });
+    document.getElementById("video").currentTime = currentTime;
+  }
+});
+
+async function runAsciiShaderOnWebcamFeed() {
   disableInputs();
   const startTime = Date.now();
   const video = createVideo();
+  video.classList.add("webcam");
   const canvas = createCanvas();
   try {
     await feedWebCamToVideoElement(video);
@@ -28,17 +60,12 @@ document.getElementById("enable-webcam").addEventListener("click", async () => {
     await waitMs(remainingTimeForSmoothAnimation);
     reset();
   }
-});
+}
 
-const userSubmittedVideoInput = document.getElementById("user-submitted-video");
-userSubmittedVideoInput.addEventListener("change", async (evt) => {
-  const videoFile = evt.target.files[0];
-  if (!videoFile) {
-    return;
-  }
-  userSubmittedVideoInput.value = null;
+async function runAsciiShaderOnVideoFile({ videoFile }) {
   disableInputs();
   const videoElement = createVideo();
+  videoElement.classList.add("video-upload");
   const videoReady = Promise.race([
     asyncEvent({ element: videoElement, eventName: "canplay" }).then(
       () => ({})
@@ -63,16 +90,16 @@ userSubmittedVideoInput.addEventListener("change", async (evt) => {
     canvas,
     frameRate: FRAME_RATE,
   });
-});
-
-document.getElementById("stop").addEventListener("click", reset);
+}
 
 function reset() {
   stopCurrentStreaming?.();
+  stopCurrentStreaming = null;
   disableVideo();
   destroyVideo();
   destroyCanvas();
   enableInputs();
+  document.getElementById("user-submitted-video").value = null;
 }
 
 function disableInputs() {
