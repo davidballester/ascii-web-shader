@@ -52,6 +52,7 @@ async function runAsciiShaderOnWebcamFeed() {
       video,
       canvas,
       frameRate: FRAME_RATE,
+      mirror: true,
     });
   } catch (err) {
     console.error(err);
@@ -131,7 +132,6 @@ function disableVideo() {
 }
 
 function mirrorVideo() {
-  document.getElementById("canvas").classList.add("mirrored");
   document.getElementById("video").classList.add("mirrored");
 }
 

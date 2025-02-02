@@ -6,7 +6,12 @@ const ASCII_CHARACTERS = "$#@MXxoi;:,. ".split("");
 const COLUMNS = 80;
 const getTextColor = buildGetTextColor();
 
-export function videoToAscii({ video, canvas: asciiCanvas, frameRate }) {
+export function videoToAscii({
+  video,
+  canvas: asciiCanvas,
+  frameRate,
+  mirror = false,
+}) {
   const { fontSize, scaleFactor } = prepareAsciiCanvas({
     canvas: asciiCanvas,
     video,
@@ -16,6 +21,7 @@ export function videoToAscii({ video, canvas: asciiCanvas, frameRate }) {
   const frameGenerator = generateFrames({
     videoElement: video,
     scaleFactor,
+    mirror,
   });
   const context = asciiCanvas.getContext("2d");
   const msBetweenFrames = 1e3 / frameRate;
@@ -79,15 +85,24 @@ function prepareAsciiCanvas({ canvas, video }) {
   };
 }
 
-function* generateFrames({ videoElement, scaleFactor }) {
+function* generateFrames({ videoElement, scaleFactor, mirror }) {
   const canvas = document.createElement("canvas");
   canvas.width = videoElement.videoWidth * scaleFactor;
   canvas.height = videoElement.videoHeight * scaleFactor;
   const canvasContext = canvas.getContext("2d", {
     willReadFrequently: true,
   });
+  if (mirror) {
+    canvasContext.scale(-1, 1);
+  }
   while (true) {
-    canvasContext.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+    canvasContext.drawImage(
+      videoElement,
+      0,
+      0,
+      mirror ? -canvas.width : canvas.width,
+      canvas.height
+    );
     const imageData = canvasContext.getImageData(
       0,
       0,
