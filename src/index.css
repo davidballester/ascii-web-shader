@@ -3,11 +3,3 @@
 .mirrored {
   transform: rotateY(180deg);
 }
-
-canvas.mirrored {
-  margin-left: 8px !important;
-}
-
-video.mirrored {
-  margin-left: 16px !important;
-}

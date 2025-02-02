@@ -10,9 +10,7 @@
   <body class="text-sky-100 bg-linear-45 from-orange-700 to-orange-400">
     <div class="container mx-auto flex flex-col min-h-screen">
       <main class="p-8 flex-grow">
-        <header
-          class="text-center p-4 sm:p-16 mt-32 md:mt-16 min-h-0 sm:min-h-lvh lg:min-h-0"
-        >
+        <header class="text-center p-4 sm:p-16 mt-32 md:mt-16">
           <h1 class="text-5xl lg:text-8xl font-bold">
             Check out this ASCII shader
           </h1>
@@ -52,16 +50,16 @@
             id="feed"
             class="justify-center space-y-8 hidden peer-[.live]:flex relative flex-col items-center"
           >
-            <div class="flex sm:space-x-4">
+            <div class="flex lg:space-x-4">
               <video
                 id="video-template"
-                class="rounded bg-sky-100 shadow-md shadow-sky-950/20 border-t-4 border-r-4 border-l-4 border-b-[64px] border-sky-100 hidden invisible sm:visible absolute sm:relative top-0 left-0 w-full sm:w-[50%]"
+                class="rounded bg-sky-100 shadow-md shadow-sky-950/20 border-t-4 border-r-4 border-l-4 border-b-[64px] border-sky-100 hidden invisible lg:visible absolute lg:relative top-0 left-0 w-full lg:w-[50%]"
                 playsinline
                 muted
               ></video>
               <canvas
                 id="canvas-template"
-                class="rounded bg-sky-100 text-sky-950 shadow-md shadow-sky-950/20 border-t-4 border-r-4 border-l-4 border-b-4 sm:border-b-[64px] border-sky-100 hidden flex-grow h-full sm:w-[50%]"
+                class="rounded bg-sky-100 text-sky-950 shadow-md shadow-sky-950/20 border-t-4 border-r-4 border-l-4 border-b-4 lg:border-b-[64px] border-sky-100 hidden flex-grow h-full lg:w-[50%]"
               ></canvas>
             </div>
             <button
